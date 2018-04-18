@@ -88,12 +88,14 @@ public class ExemploTest {
     }
 
     @Test
-    public void test02() {
+    public void test02(){
         driver.get("https://github.com/");
         
         WebElement signUpButton = driver.findElement(By.xpath("/html/body/div[4]/div[1]/div/div/div[2]/div[1]/form/button"));
         signUpButton.click();
 
+        takeScreenShot();
+        
         WebElement errorMsg = driver.findElement(By.xpath("//*[@id=\"signup-form\"]/div"));
         assertEquals("There were problems creating your account.", errorMsg.getText().trim());
 
@@ -106,9 +108,11 @@ public class ExemploTest {
         WebElement caButton = driver.findElement(By.id("signup_button"));
         caButton.click();
         
+        takeScreenShot();
+        
         
         try {
-            errorMsg02 = driver.findElement(By.xpath("//*[@id=\"signup-form\"]/dl[1]/dd[2]"));
+            errorMsg02 = driver.findElement(By.xpath("//*[@id=\"signup-form\"]/auto-check[1]/dl/dd[2]"));
             fail();
         } catch (NoSuchElementException e) {}
         driver.close();
