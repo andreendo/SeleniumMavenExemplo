@@ -81,7 +81,7 @@ public class ExemploTest {
     }
     
     @Test
-    public void test02() {
+    public void testExemploSlide() {
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\Tiago.DESKTOP-1Q9EAE0\\Desktop\\Selenium\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
