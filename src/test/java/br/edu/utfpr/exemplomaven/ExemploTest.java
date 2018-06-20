@@ -32,7 +32,7 @@ public class ExemploTest {
      *
      * Versão utilizada do chromedriver: 2.35.528139
      */
-    private static String CHROMEDRIVER_LOCATION = "/home/utfpr/install/selenium/chromedriver";
+    private static String CHROMEDRIVER_LOCATION = "C:\\Users\\Edmundo\\Documents\\MESTRADO\\TESTE\\TESTE DE SISTEMA\\9 - CHROME DRIVER\\chromedriver.EXE";
     
     private static int scId = 0;
 
@@ -47,7 +47,7 @@ public class ExemploTest {
     public void before() {
         ChromeOptions chromeOptions = new ChromeOptions();
         //Opcao headless para MacOS e Linux
-        chromeOptions.addArguments("headless");
+        //chromeOptions.addArguments("headless");
         chromeOptions.addArguments("window-size=1200x600");
         chromeOptions.addArguments("start-maximized");
         
@@ -61,21 +61,75 @@ public class ExemploTest {
     }
     
     @Test
-    public void testGoogleSearch() {
-        driver.get("https://www.google.com.br/");
-        WebElement searchInput = driver.findElement(By.name("q"));
-        searchInput.sendKeys("teste de software");
+    public void testLoginESenhaErrado() {
+        driver.get("https://ration.io");
+        WebElement campoEntrar = driver.findElement(By.xpath("//*[@id=\"page-header\"]/div/a[2]"));
+        campoEntrar.click();
+        
+        WebElement inputEmail = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[1]/input"));
+        inputEmail.sendKeys("edmundo1100@hotmail.com");
+        WebElement inputSenha = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[2]/input"));
+        inputSenha.sendKeys("123");
+        
+        WebElement botaoAssinar = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[4]/button"));
+        botaoAssinar.submit();
+        
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        WebElement mensagemErro = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/p/small"));
+        String erro = mensagemErro.getText();
         
         takeScreenShot();
+ 
+        assertEquals("The credentials you entered are not associated with an account. Please check your email and/or password and try again.",erro);
+    }
+    
+    @Test
+    public void testValidacoesCamposInscricao() {
+        driver.get("https://ration.io");
+        WebElement campoSignUp = driver.findElement(By.xpath("//*[@id=\"page-header\"]/div/div/a"));
+        campoSignUp.click();
         
-        searchInput.submit();
+        WebElement botaoCreateAccount = driver.findElement(By.xpath("//*[@id=\"signup\"]/div/div/form/div[6]/button"));
+        botaoCreateAccount.click();
         
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until( (ExpectedCondition<Boolean>) (WebDriver d) -> d.getTitle().toLowerCase().startsWith("teste") );
-        
+        WebDriverWait esperar = new WebDriverWait(driver, 5);
         takeScreenShot();
         
-        assertTrue(driver.getTitle().startsWith("teste de software"));
+        WebElement feedBackNome = driver.findElement(By.xpath("//*[@id=\"signup\"]/div/div/form/div[1]/div"));
+        WebElement feedBackEmail = driver.findElement(By.xpath("//*[@id=\"signup\"]/div/div/form/div[2]/div"));
+        WebElement feedBackSenha = driver.findElement(By.xpath("//*[@id=\"signup\"]/div/div/form/div[3]/div"));
+        
+        String erroNome = feedBackNome.getText();
+        String erroEmail = feedBackEmail.getText();
+        String erroSenha = feedBackSenha.getText();
+        
+        assertEquals("Please enter your full name.",erroNome);
+        assertEquals("Please enter a valid email address.",erroEmail);
+        assertEquals("Please enter a password.",erroSenha);
+    }
+    
+    @Test
+    public void testValidacooSenhaDiferentes() {
+        driver.get("https://ration.io");
+        WebElement campoSignUp = driver.findElement(By.xpath("//*[@id=\"page-header\"]/div/div/a"));
+        campoSignUp.click();
+        
+        WebElement inputSenha = driver.findElement(By.xpath("//*[@id=\"password\"]"));
+        inputSenha.sendKeys("123");
+        WebElement inputConfirmacaoSenha = driver.findElement(By.xpath("//*[@id=\"confirm-password\"]"));
+        inputConfirmacaoSenha.sendKeys("1233");
+        
+        WebElement botaoCreateAccount = driver.findElement(By.xpath("//*[@id=\"signup\"]/div/div/form/div[6]/button"));
+        botaoCreateAccount.click();
+        
+        WebDriverWait esperar = new WebDriverWait(driver, 5);
+        takeScreenShot();
+        
+        WebElement feedBackConfirmacaoSenha = driver.findElement(By.xpath("//*[@id=\"signup\"]/div/div/form/div[4]/div"));
+ 
+        String erroSenhaDiferentes = feedBackConfirmacaoSenha.getText();
+        
+        assertEquals("Your password and confirmation do not match.",erroSenhaDiferentes);
     }
     
     private void takeScreenShot() {
