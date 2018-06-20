@@ -32,7 +32,8 @@ public class ExemploTest {
      *
      * Versão utilizada do chromedriver: 2.35.528139
      */
-    private static String CHROMEDRIVER_LOCATION = "/home/utfpr/install/selenium/chromedriver";
+    //private static String CHROMEDRIVER_LOCATION = "/home/utfpr/install/selenium/chromedriver";
+    private static String CHROMEDRIVER_LOCATION = "./chromedriver.exe";
     
     private static int scId = 0;
 
