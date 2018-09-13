@@ -54,7 +54,7 @@ public class ExemploTest {
         driver.close();
     }
 
-    //@Test
+    @Test
     public void testGoogleSearch() {
         driver.get("https://www.google.com.br/");
         WebElement searchInput = driver.findElement(By.name("q"));
@@ -72,7 +72,7 @@ public class ExemploTest {
         assertTrue(driver.getTitle().startsWith("teste de software"));
     }
 
-    //@Test
+    @Test
     public void test02() {
         driver.get("https://github.com/");
 
@@ -103,7 +103,7 @@ public class ExemploTest {
         driver.close();
     }
     
-    //@Test
+    @Test
     public void testSignUpRation(){
         driver.get("https://ration.io/");
         
