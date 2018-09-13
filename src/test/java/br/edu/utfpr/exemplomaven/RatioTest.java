@@ -111,4 +111,37 @@ public class RatioTest {
         assertEquals("The credentials you entered are not associated with an account. Please check your email and/or password and try again.", errorMsg.getText().trim());
          
     }
+    
+     @Test
+    public void testContact() throws InterruptedException {
+        
+        driver.get("https://ration.io/login");
+        WebElement emailInput = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[1]/input"));
+        emailInput.sendKeys("jgs1884@outlook.com");
+
+        WebElement passwordInput = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[2]/input"));
+        passwordInput.sendKeys("123456");
+
+        WebElement btnLogin = driver.findElement(By.className("ajax-button"));
+        btnLogin.click();    
+                
+        driver.findElement(By.cssSelector("#page-header > div > a[href=\"/contact\"]")).click();
+        
+        new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(By.id("full-name"))).sendKeys("teste");
+        new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(By.id("email-address"))).sendKeys("teste@teste.com");
+        new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(By.id("topic"))).sendKeys("price teste");
+        new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(By.id("message"))).sendKeys("hello teste");
+
+        WebElement btnSend = driver.findElement(By.className("ajax-button"));
+        btnSend.click();
+        
+        WebElement h1 = driver.findElement(By.cssSelector("#contact > div > h1"));
+        WebElement subText = driver.findElement(By.xpath("//*[@id=\"contact\"]/div/div/p[2]"));
+        
+                
+        assertEquals("Get in touch", h1.getText().trim());
+        assertEquals("We have received your message, and someone from our team will get back to you soon.", subText.getText().trim());
+        
+    }
+    
 }
