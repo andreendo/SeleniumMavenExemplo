@@ -1,35 +1,23 @@
 package br.edu.utfpr.exemplomaven;
 
+import br.edu.utfpr.exemplomaven.po.LoginPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/**
- *
- * @author andreendo
- */
 public class RatioTest {
-
-    private static int scId = 0;
 
     WebDriver driver;
 
@@ -41,7 +29,7 @@ public class RatioTest {
     @Before
     public void before() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("headless");
+        // chromeOptions.addArguments("headless");
         chromeOptions.addArguments("window-size=1200x600");
         chromeOptions.addArguments("start-maximized");
 
@@ -52,6 +40,19 @@ public class RatioTest {
     @After
     public void after() {
         driver.close();
+    }
+    
+    @Test
+    public void testIncorrectPassword() throws InterruptedException {
+        driver.get("https://ration.io/login");
+        LoginPage login = new LoginPage(driver);
+        
+        login
+            .setEmail("jgs1884@outlook.com")
+            .setPassword("123456789")
+            .submit();
+
+        assertEquals("The credentials you entered are not associated with an account. Please check your email and/or password and try again.", login.getErrorMsg());  
     }
 
     @Test
@@ -93,26 +94,6 @@ public class RatioTest {
     }
     
     @Test
-    public void testIncorrectPassword() throws InterruptedException {
-        //logar com credenciais erradas
-        
-        driver.get("https://ration.io/login");
-
-        WebElement inputEmail = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[1]/input"));
-        inputEmail.sendKeys("jgs1884@outlook.com");
-        
-        WebElement inputPassword = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[2]/input"));
-        inputPassword.sendKeys("12312121");
-        
-        WebElement btnLogin = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[4]/button"));
-        btnLogin.click();
-
-        WebElement errorMsg = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/p/small"));
-        assertEquals("The credentials you entered are not associated with an account. Please check your email and/or password and try again.", errorMsg.getText().trim());
-         
-    }
-    
-     @Test
     public void testContact() throws InterruptedException {
         
         driver.get("https://ration.io/login");
@@ -140,8 +121,7 @@ public class RatioTest {
         
                 
         assertEquals("Get in touch", h1.getText().trim());
-        assertEquals("We have received your message, and someone from our team will get back to you soon.", subText.getText().trim());
-        
+        assertEquals("We have received your message, and someone from our team will get back to you soon.", subText.getText().trim());   
     }
     
 }
