@@ -41,7 +41,7 @@ public class RatioTest {
     @Before
     public void before() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        //chromeOptions.addArguments("headless");
+        chromeOptions.addArguments("headless");
         chromeOptions.addArguments("window-size=1200x600");
         chromeOptions.addArguments("start-maximized");
 
@@ -55,8 +55,45 @@ public class RatioTest {
     }
 
     @Test
-    public void testIncorrectPassword() throws InterruptedException {
+    public void testInviteFriends() throws InterruptedException {
+        
+        driver.get("https://ration.io/login");
+        WebElement emailInput = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[1]/input"));
+        emailInput.sendKeys("jgs1884@outlook.com");
 
+        WebElement passwordInput = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[2]/input"));
+        passwordInput.sendKeys("123456");
+
+        WebElement btnLogin = driver.findElement(By.className("ajax-button"));
+        btnLogin.click();
+        
+        driver.findElement(By.cssSelector("#friends > div > div.page-header.text-center > div > button")).click();
+
+        WebElement inputName = driver.findElement(By.xpath("//*[@id=\"friends\"]/div[2]/div[2]/div/form/div[1]/div[1]/div/div[1]/input"));
+        inputName.sendKeys("xaxaxa");
+
+        WebElement inputEmail = driver.findElement(By.xpath("//*[@id=\"friends\"]/div[2]/div[2]/div/form/div[1]/div[1]/div/div[2]/input"));
+        inputEmail.sendKeys("xaxaxa@email.com");
+
+        WebElement btnAdd = driver.findElement(By.xpath("//*[@id=\"friends\"]/div[2]/div[2]/div/form/div[2]/button[1]"));
+        btnAdd.click();
+   
+        List<WebElement> tbody = driver.findElements(By.xpath("//*[@id=\"friends\"]/div/div[2]/table/tbody/tr"));
+        int size = tbody.size()+1;
+        
+        String pathTd = "";
+        if (size == 1) {
+            pathTd = "//*[@id=\"friends\"]/div/div[2]/table/tbody/tr/td[1]/strong";
+        } else {
+            pathTd = "//*[@id=\"friends\"]/div/div[2]/table/tbody/tr["+size+"]/td[1]/strong";
+        }
+        
+        WebElement userInvited = new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(By.xpath(pathTd)));
+        assertEquals("xaxaxa", userInvited.getText().trim());
+    }
+    
+    @Test
+    public void testIncorrectPassword() throws InterruptedException {
         //logar com credenciais erradas
         
         driver.get("https://ration.io/login");
