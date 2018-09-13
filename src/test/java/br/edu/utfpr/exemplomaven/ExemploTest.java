@@ -90,6 +90,22 @@ public class ExemploTest {
         takeScreenShot();
     }
     
+    @Test
+    public void testeLougout(){
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until( (ExpectedCondition<Boolean>) (WebDriver d) -> d.findElement(By.xpath("//*[@id=\"friends\"]/div/div[1]/h1")).
+                                                                    getText().toLowerCase().startsWith("friends") );
+        WebElement botaoAccount = driver.findElement(By.xpath("//*[@id=\"header-account-menu-link\"]"));
+        botaoAccount.click();
+        WebElement botaoSignOut = driver.findElement(By.xpath("//*[@id=\"page-header\"]/div/div/div/a[2]"));
+        botaoSignOut.click();
+        
+        WebDriverWait wait2 = new WebDriverWait(driver, 10);
+        wait2.until( (ExpectedCondition<Boolean>) (WebDriver d) -> d.findElement(By.xpath("//*[@id=\"login\"]/div/h1")).
+                                                                    getText().toLowerCase().startsWith("sign in") );
+        takeScreenShot();
+    }
+    
     private void takeScreenShot() {
         File sourceFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         try {
