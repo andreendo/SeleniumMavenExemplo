@@ -1,5 +1,7 @@
 package br.edu.utfpr.exemplomaven;
 
+import br.edu.utfpr.exemplomaven.po.HomePage;
+import br.edu.utfpr.exemplomaven.po.LoginPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -7,17 +9,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class LoginTest {
 
@@ -42,23 +38,19 @@ public class LoginTest {
 
     @Test
     public void testLogin() {
-        driver.get("https://ration.io/login");
-        WebElement emailInput = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[1]/input"));
-        emailInput.sendKeys("liderandobr@gmail.com");
-        WebElement senhaInput = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[2]/input"));
-        senhaInput.sendKeys("Utfpr@2018");
-        WebElement botaoLogin = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[4]/button"));
-        botaoLogin.submit();
-        takeScreenShot();
+        LoginPage loginPage = new LoginPage(driver);
 
-
-
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until( (ExpectedCondition<Boolean>) (WebDriver d) -> d.findElement(By.xpath("//*[@id=\"friends\"]/div/div[1]/h1")) != null);
+        loginPage.setEmail("liderandobr@gmail.com");
+        loginPage.setSenha("Utfpr@2018");
+        loginPage.submit();
 
         takeScreenShot();
 
-        assertEquals(driver.getCurrentUrl(), "https://ration.io/friends");
+        HomePage homePage = loginPage.esperarHomeCarregar();
+
+        takeScreenShot();
+
+        assertEquals(homePage.getUrl(), "https://ration.io/friends");
     }
 
     private void takeScreenShot() {

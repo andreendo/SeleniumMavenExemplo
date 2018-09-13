@@ -4,9 +4,11 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.*;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -32,25 +34,30 @@ public class RemoverImagemTest {
     }
 
     @Test
-    public void adicionarImagem() {
+    public void removerImagem() {
         driver.get("https://ration.io/login");
         TestUtils.login(driver);
         TestUtils.uploadImage(driver, 2);
-        WebElement botaoRemover = driver.findElement(By.xpath("//*[@id=\"available-things\"]/div/div[2]/div/div"));
-        botaoRemover.click();
-        WebElement botaoConfirmarRemocao = driver.findElement(By.xpath("//*[@id=\"available-things\"]/div[2]/div[2]/div/form/div[2]/button[2]/span"));
-        botaoConfirmarRemocao.click();
+
+        Actions action = new Actions(driver);
+        WebElement imagem = driver.findElement(By.xpath("//*[@id=\"available-things\"]/div/div[2]/div[1]/img"));
+        action
+                .moveToElement(imagem)
+                .moveToElement(driver.findElement(By.xpath("//*[@id=\"available-things\"]/div/div[2]/div[1]/div")))
+                .click()
+                .build()
+                .perform();
 
         takeScreenShot();
 
+        WebElement botaoConfirmarRemocao = driver.findElement(By.xpath("//*[@id=\"available-things\"]/div[2]/div[2]/div/form/div[2]/button[2]"));
+        botaoConfirmarRemocao.click();
 
-
-        WebDriverWait wait = new WebDriverWait(driver, 10);
+        WebDriverWait wait = new WebDriverWait(driver, 15);
         wait.until( (ExpectedCondition<Boolean>) (WebDriver d) -> d.getCurrentUrl().equals("https://ration.io/things"));
 
         takeScreenShot();
 
-        Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"available-things\"]/div/div[2]/div/span")) == null);
     }
 
     private void takeScreenShot() {

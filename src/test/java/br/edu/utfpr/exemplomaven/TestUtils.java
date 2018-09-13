@@ -12,7 +12,7 @@ public class TestUtils {
 
     public static WebDriver setup() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        //chromeOptions.addArguments("headless");
+        chromeOptions.addArguments("headless");
         chromeOptions.addArguments("window-size=1200x600");
         chromeOptions.addArguments("start-maximized");
 
