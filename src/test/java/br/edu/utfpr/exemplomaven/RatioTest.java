@@ -19,6 +19,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -46,16 +47,6 @@ public class RatioTest {
 
         driver = new ChromeDriver(chromeOptions);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
-        driver.get("https://ration.io/login");
-        WebElement emailInput = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[1]/input"));
-        emailInput.sendKeys("jgs1884@outlook.com");
-
-        WebElement passwordInput = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[2]/input"));
-        passwordInput.sendKeys("123578964");
-
-        WebElement btnLogin = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[4]/button"));
-        btnLogin.click();
     }
 
     @After
@@ -64,35 +55,23 @@ public class RatioTest {
     }
 
     @Test
-    public void testInviteFriends() throws InterruptedException {
+    public void testIncorrectPassword() throws InterruptedException {
 
-        driver.get("https://ration.io/friends");
-        WebElement btnInviteFriends = driver.findElement(By.xpath("//*[@id=\"friends\"]/div/div[1]/div/button"));
-        btnInviteFriends.click();
-
-        WebElement inputName = driver.findElement(By.xpath("//*[@id=\"friends\"]/div[2]/div[2]/div/form/div[1]/div[1]/div/div[1]/input"));
-        inputName.sendKeys("xaxaxa");
-
-        WebElement inputEmail = driver.findElement(By.xpath("//*[@id=\"friends\"]/div[2]/div[2]/div/form/div[1]/div[1]/div/div[2]/input"));
-        inputEmail.sendKeys("xaxaxa@email.com");
-
-        WebElement btnAdd = driver.findElement(By.xpath("//*[@id=\"friends\"]/div[2]/div[2]/div/form/div[2]/button[1]"));
-        btnAdd.click();
+        //logar com credenciais erradas
         
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-   
-        List<WebElement> tbody = driver.findElements(By.xpath("//*[@id=\"friends\"]/div/div[2]/table/tbody/tr"));
-        int size = tbody.size();
-        
-        String pathTd = "";
-        if (size == 1) {
-            pathTd = "//*[@id=\"friends\"]/div/div[2]/table/tbody/tr/td[1]/strong";
-        } else {
-            pathTd = "//*[@id=\"friends\"]/div/div[2]/table/tbody/tr["+size+"]/td[1]/strong";
-        }
+        driver.get("https://ration.io/login");
 
-        WebElement userInvited = driver.findElement(By.xpath(pathTd));
+        WebElement inputEmail = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[1]/input"));
+        inputEmail.sendKeys("jgs1884@outlook.com");
         
-        assertEquals("xaxaxa", userInvited.getText().trim());
+        WebElement inputPassword = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[2]/input"));
+        inputPassword.sendKeys("12312121");
+        
+        WebElement btnLogin = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[4]/button"));
+        btnLogin.click();
+
+        WebElement errorMsg = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/p/small"));
+        assertEquals("The credentials you entered are not associated with an account. Please check your email and/or password and try again.", errorMsg.getText().trim());
+         
     }
 }
