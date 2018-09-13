@@ -4,6 +4,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import javax.swing.text.html.HTML;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
@@ -71,7 +72,7 @@ public class ExemploTest {
         assertTrue(driver.getTitle().startsWith("teste de software"));
     }
 
-    @Test
+    //@Test
     public void test02() {
         driver.get("https://github.com/");
 
@@ -100,6 +101,35 @@ public class ExemploTest {
         } catch (NoSuchElementException e) {
         }
         driver.close();
+    }
+    
+    //@Test
+    public void testSignUpRation(){
+        driver.get("https://ration.io/");
+        
+        driver.findElement(By.linkText("Sign up")).click();
+        String bodyText = driver.findElement(By.tagName("body")).getText();
+        assertTrue(bodyText.contains("Create an account"));
+        
+        WebElement button = driver.findElement(By.xpath("//*[@id=\"signup\"]/div/div/form/div[6]/button"));
+        button.click();
+        String errorMsg = driver.findElement(By.xpath("//*[@id=\"signup\"]/div/div/form/div[1]/div")).getText();
+        assertEquals("Please enter your full name.", errorMsg);
+        
+    }
+    
+    @Test
+    public void testFAQRation() throws InterruptedException{
+        driver.get("https://ration.io/");
+        
+        driver.findElement(By.linkText("FAQ")).click();
+        Thread.sleep(1000);
+        driver.findElement(By.linkText("click here")).click();
+        
+        String supportTitle = driver.findElement(By.tagName("body")).getText();
+        
+        assertTrue(supportTitle.contains("Sails/Node.js Support"));
+        
     }
 
     private void takeScreenShot() {
