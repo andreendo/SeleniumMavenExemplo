@@ -12,6 +12,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -39,7 +40,7 @@ public class ExemploTest {
     @Before
     public void before() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("headless");
+//        chromeOptions.addArguments("headless");
         chromeOptions.addArguments("window-size=1200x600");
         chromeOptions.addArguments("start-maximized");
         
@@ -52,22 +53,47 @@ public class ExemploTest {
         driver.close();
     }
     
+//    @Test
+//    public void testGoogleSearch() {
+//        driver.get("https://www.google.com.br/");
+//        WebElement searchInput = driver.findElement(By.name("q"));
+//        searchInput.sendKeys("teste de software");
+//        
+//        takeScreenShot();
+//        
+//        searchInput.submit();
+//        
+//        WebDriverWait wait = new WebDriverWait(driver, 30);
+//        wait.until( (ExpectedCondition<Boolean>) (WebDriver d) -> d.getTitle().toLowerCase().startsWith("teste") );
+//        
+//        takeScreenShot();
+//        
+//        assertTrue(driver.getTitle().startsWith("teste de software"));
+//    }
+    
     @Test
-    public void testGoogleSearch() {
-        driver.get("https://www.google.com.br/");
-        WebElement searchInput = driver.findElement(By.name("q"));
-        searchInput.sendKeys("teste de software");
+    public void testeGitHub() {
+        driver.get("https://www.github.com/");
+        WebElement signUpButton = driver.findElement( By.xpath("/html/body/div[4]/div[1]/div/div/div[2]/div/form/button") );
+        signUpButton.click();
+
+        //check msg: "There were problems creating your account."
+        WebElement errorMsg = driver.findElement( By.xpath("//*[@id=\"signup-form\"]/div[1]") );
+        assertEquals("There were problems creating your account.", errorMsg.getText().trim());
+
+        //check msg: "Login can't be blank"
+        WebElement errorMsg02 = driver.findElement( By.xpath("//*[@id=\"signup-form\"]/auto-check[1]/dl/dd[2]") );
+        assertEquals("Login can't be blank", errorMsg02.getText().trim());
+
+//        navigate to previous page
+//        driver.navigate().back();  
         
-        takeScreenShot();
-        
-        searchInput.submit();
-        
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until( (ExpectedCondition<Boolean>) (WebDriver d) -> d.getTitle().toLowerCase().startsWith("teste") );
-        
-        takeScreenShot();
-        
-        assertTrue(driver.getTitle().startsWith("teste de software"));
+        //fill the username
+        WebElement username = driver.findElement( By.id("user_login") );
+        username.sendKeys("guimpo");
+
+        WebElement errorMsg03 = driver.findElement( By.xpath("//*[@id=\"signup-form\"]/auto-check[1]/dl/dd[2]") );
+        assertEquals("Login is already taken", errorMsg03.getText().trim());
     }
     
     private void takeScreenShot() {
