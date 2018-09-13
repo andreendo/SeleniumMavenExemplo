@@ -33,7 +33,7 @@ public class ExemploTest {
     
     @BeforeClass
     public static void beforeClass() {
-        WebDriverManager.chromedriver().setup();
+        WebDriverManager.chromedriver().proxy("10.20.10.50:3128").setup();
     }
     
     @Before
@@ -46,14 +46,15 @@ public class ExemploTest {
         driver = new ChromeDriver(chromeOptions);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         
-        fazLogin();
+        //fazLogin();
     }
     
     @After
     public void after() {
         driver.close();
     }
-
+    
+    /*
     @Test
     public void testeLogado(){
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -128,4 +129,5 @@ public class ExemploTest {
         WebElement campoSignIn = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[4]/button"));
         campoSignIn.click();
     }
+    */
 }
