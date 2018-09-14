@@ -2,6 +2,7 @@ package br.edu.utfpr.exemplomaven;
 
 import br.edu.utfpr.exemplomaven.po.HomePage;
 import br.edu.utfpr.exemplomaven.po.LoginPage;
+import br.edu.utfpr.exemplomaven.po.Setup;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -28,7 +29,7 @@ public class LoginTest {
 
     @Before
     public void before() {
-        driver = TestUtils.setup();
+        driver = Setup.setup();
     }
 
     @After

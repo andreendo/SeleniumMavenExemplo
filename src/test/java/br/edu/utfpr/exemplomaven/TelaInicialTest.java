@@ -1,5 +1,6 @@
 package br.edu.utfpr.exemplomaven;
 
+import br.edu.utfpr.exemplomaven.po.Setup;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -7,14 +8,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -32,7 +30,7 @@ public class TelaInicialTest {
 
     @Before
     public void before() {
-        driver = TestUtils.setup();
+        driver = Setup.setup();
     }
 
     @After

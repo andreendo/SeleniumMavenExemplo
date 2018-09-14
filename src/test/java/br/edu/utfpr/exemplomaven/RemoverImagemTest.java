@@ -1,5 +1,6 @@
 package br.edu.utfpr.exemplomaven;
 
+import br.edu.utfpr.exemplomaven.po.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.*;
@@ -8,9 +9,10 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
 
 public class RemoverImagemTest {
 
@@ -25,7 +27,7 @@ public class RemoverImagemTest {
 
     @Before
     public void before() {
-        driver = TestUtils.setup();
+        driver = Setup.setup();
     }
 
     @After
@@ -35,28 +37,33 @@ public class RemoverImagemTest {
 
     @Test
     public void removerImagem() {
-        driver.get("https://ration.io/login");
-        TestUtils.login(driver);
-        TestUtils.uploadImage(driver, 2);
+        LoginPage loginPage = new LoginPage(driver);
+        RemoverImagem removePage = new RemoverImagem(driver);
+        Menu menu = new Menu(driver);
 
-        Actions action = new Actions(driver);
-        WebElement imagem = driver.findElement(By.xpath("//*[@id=\"available-things\"]/div/div[2]/div[1]/img"));
-        action
-                .moveToElement(imagem)
-                .moveToElement(driver.findElement(By.xpath("//*[@id=\"available-things\"]/div/div[2]/div[1]/div")))
-                .click()
-                .build()
-                .perform();
+        loginPage.setEmail("liderandobr@gmail.com");
+        loginPage.setSenha("Utfpr@2018");
+        loginPage.submit();
 
         takeScreenShot();
 
-        WebElement botaoConfirmarRemocao = driver.findElement(By.xpath("//*[@id=\"available-things\"]/div[2]/div[2]/div/form/div[2]/button[2]"));
-        botaoConfirmarRemocao.click();
-
-        WebDriverWait wait = new WebDriverWait(driver, 15);
-        wait.until( (ExpectedCondition<Boolean>) (WebDriver d) -> d.getCurrentUrl().equals("https://ration.io/things"));
+        HomePage homePage = loginPage.esperarHomeCarregar();
 
         takeScreenShot();
+
+        assertEquals(homePage.getUrl(), "https://ration.io/friends");
+
+        menu.buttonItemThings();
+        removePage.remover();
+        takeScreenShot();
+        removePage.buttonConfirmRemove();
+        takeScreenShot();
+        removePage.esperarHomeCarregar();
+
+        takeScreenShot();
+
+        assertEquals(homePage.getUrl(), "https://ration.io/things");
+
 
     }
 

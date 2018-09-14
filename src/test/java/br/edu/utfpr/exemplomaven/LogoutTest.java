@@ -1,14 +1,10 @@
 package br.edu.utfpr.exemplomaven;
 
+import br.edu.utfpr.exemplomaven.po.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,36 +18,38 @@ public class LogoutTest {
     WebDriver driver;
 
     @BeforeClass
-    public static void beforeClass() {
-        WebDriverManager.chromedriver().setup();
-    }
+    public static void beforeClass() { WebDriverManager.chromedriver().setup(); }
 
     @Before
-    public void before() {
-        driver = TestUtils.setup();
-    }
+    public void before() { driver = Setup.setup(); }
 
     @After
-    public void after() {
-        driver.close();
-    }
+    public void after() { driver.close(); }
 
     @Test
     public void testLogout() {
-        driver.get("https://ration.io/login");
-        TestUtils.login(driver);
-        WebElement botaoLogout = driver.findElement(By.xpath("//*[@id=\"page-header\"]/div/div/div/a[2]"));
-        botaoLogout.click();
-        takeScreenShot();
+        LoginPage loginPage = new LoginPage(driver);
+        Menu menu = new Menu(driver);
 
-
-
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until( (ExpectedCondition<Boolean>) (WebDriver d) -> d.getCurrentUrl().equals("https://ration.io/login"));
+        loginPage.setEmail("liderandobr@gmail.com");
+        loginPage.setSenha("Utfpr@2018");
+        loginPage.submit();
 
         takeScreenShot();
 
-        assertEquals(driver.getCurrentUrl(), "https://ration.io/login");
+        HomePage homePage = loginPage.esperarHomeCarregar();
+
+        takeScreenShot();
+
+        assertEquals(homePage.getUrl(), "https://ration.io/friends");
+
+        menu.buttonItemLogout();
+
+        HomePage homePage2 = menu.esperarHomeCarregar();
+
+        takeScreenShot();
+
+        assertEquals(homePage2.getUrl(), "https://ration.io/login");
     }
 
     private void takeScreenShot() {
@@ -59,6 +57,7 @@ public class LogoutTest {
         try {
             imageId++;
             FileUtils.copyFile(sourceFile, new File("./res/" + imageId + ".png"));
-        } catch(IOException e) {}
+        } catch (IOException e) {
+        }
     }
 }
