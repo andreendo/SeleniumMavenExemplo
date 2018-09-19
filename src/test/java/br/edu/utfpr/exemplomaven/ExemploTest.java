@@ -1,6 +1,8 @@
 package br.edu.utfpr.exemplomaven;
 
 
+import br.edu.utfpr.exemplomaven.po.FriendsPage;
+import br.edu.utfpr.exemplomaven.po.LoginPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -28,6 +31,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class ExemploTest {
 
     private static int scId = 0;
+    
 
     WebDriver driver;
     
@@ -39,7 +43,7 @@ public class ExemploTest {
     @Before
     public void before() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("headless");
+        //chromeOptions.addArguments("headless");
         chromeOptions.addArguments("window-size=1200x600");
         chromeOptions.addArguments("start-maximized");
         
@@ -52,7 +56,7 @@ public class ExemploTest {
         driver.close();
     }
     
-    @Test
+    @Test @Ignore
     public void testGoogleSearch() {
         driver.get("https://www.google.com.br/");
         WebElement searchInput = driver.findElement(By.name("q"));
@@ -68,6 +72,58 @@ public class ExemploTest {
         takeScreenShot();
         
         assertTrue(driver.getTitle().startsWith("teste de software"));
+    }
+    
+    @Test @Ignore
+    public void doLogin(){
+        driver.get("https://ration.io/login");
+        
+        WebElement email = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[1]/input"));
+        email.sendKeys("caio_jahu@hotmail.com");
+        
+        WebElement password = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[2]/input"));
+        password.sendKeys("gzwqpl80");
+        
+        WebElement signIn = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/form/div[4]/button"));
+        signIn.click();
+        
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until( (ExpectedCondition<Boolean>) (WebDriver d) -> d.getCurrentUrl().equals("https://ration.io/friends")); 
+        
+        assertEquals("https://ration.io/friends", driver.getCurrentUrl());
+    }
+    
+    @Test  //@Ignore
+    public void doLoginPO(){
+        LoginPage lg = new LoginPage(driver);
+        
+        FriendsPage fp = lg.preencherEmail("caio@teste.com")
+                        .preencherPassword("teste123")
+                        .clicarBotaoSignIn()
+                        .esperarCarregar();
+        
+        assertEquals("Invite friends", fp.getBotaoInvite());
+    }
+    
+    
+    @Test @Ignore
+    public void inviteFriend(){
+        doLogin();
+        
+        WebElement buttonInviteFriends = driver.findElement(By.xpath("//*[@id=\"friends\"]/div/div[1]/div/button"));
+        buttonInviteFriends.click();
+        
+        WebElement inputNome = driver.findElement(By.xpath("//*[@id=\"friends\"]/div[2]/div[2]/div/form/div[1]/div[1]/div/div[1]/input"));
+        inputNome.sendKeys("amigo legal");
+        
+        WebElement inputEmail = driver.findElement(By.xpath("//*[@id=\"friends\"]/div[2]/div[2]/div/form/div[1]/div[1]/div/div[2]/input"));
+        inputEmail.sendKeys("amigolegal@gmail.com");
+        
+        WebElement buttonEnviar = driver.findElement(By.xpath("//*[@id=\"friends\"]/div[2]/div[2]/div/form/div[2]/button[1]"));
+        buttonEnviar.click();
+        
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until( (ExpectedCondition<Boolean>) (WebDriver d) -> d.getCurrentUrl().equals("https://ration.io/friends"));
     }
     
     private void takeScreenShot() {
