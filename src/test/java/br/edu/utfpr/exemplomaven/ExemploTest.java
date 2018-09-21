@@ -32,21 +32,39 @@ public class ExemploTest {
     
     @BeforeClass
     public static void beforeClass() {
-        WebDriverManager.chromedriver()
-                .proxy("10.20.10.50:3128")
-                .proxyUser("a1634089")
-                .proxyPass("software2014")
-                .setup();
+        WebDriverManager.chromedriver().setup();
      
     }
     
     @Before
     public void before() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        //chromeOptions.addArguments("headless");
-        chromeOptions.addArguments("start-maximized");     
+        chromeOptions.addArguments("start-maximized"); 
+        
         driver = new ChromeDriver(chromeOptions);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.get("https://ration.io/");
+        
+        // Login 
+        // Button - LogIn
+        WebElement LogInButton = driver.findElement( By.xpath("//*[@id=\"page-header\"]/div/a[2]") );
+        LogInButton.click();
+        
+        // Input - E-mail Address
+        WebElement EmailAddressInput = driver.findElement( By.xpath("//*[@id=\"login\"]/div/div/form/div[1]/input") );
+        EmailAddressInput.sendKeys("rafaelsampy@hotmail.com");
+
+        // Input - Password
+        WebElement PasswordInput = driver.findElement( By.xpath("//*[@id=\"login\"]/div/div/form/div[2]/input") );
+        PasswordInput.sendKeys("teste1234");
+        
+        // Button - Sign In
+        WebElement SignInButton = driver.findElement( By.xpath("//*[@id=\"login\"]/div/div/form/div[4]/button") );
+        SignInButton.click();
+              
+        // Message - System
+        WebElement SystemMessage = driver.findElement( By.xpath("//*[@id=\"friends\"]/div/div[1]/h2") );
+        assertEquals("View and add people to share stuff with.", SystemMessage.getText());
     }
     
     @After
@@ -54,116 +72,138 @@ public class ExemploTest {
         driver.close();
     }
     
-
+    /* Usuario já Cadastrado */
+    @Ignore
     @Test
-    public void testSingUpRation() {     
-        driver.get("https://ration.io/");
-        
-       //  Button SignUp
+    public void testSingUpRation() {   
+        //  Button - SignUp
         WebElement SignUpButton = driver.findElement( By.xpath("//*[@id=\"page-header\"]/div/div/a") );
         SignUpButton.click();
         
-        // Input Full Name
+        // Input - Full Name
         WebElement FullNameInput = driver.findElement( By.xpath("//*[@id=\"full-name\"]") );
         FullNameInput.sendKeys("Rafael Hideki de Macedo Sampy");
 
-        // Input E-mail Address
+        // Input - E-mail Address
         WebElement EmailInput = driver.findElement( By.xpath("//*[@id=\"email-address\"]") );
         EmailInput.sendKeys("rafaelsampy@hotmail.com");
 
-        // Input Choose Password
+        // Input - Choose Password
         WebElement ChoosePasswordInput = driver.findElement( By.xpath("//*[@id=\"password\"]") );
         ChoosePasswordInput.sendKeys("teste1234");
 
-        // Input Confirm Password
+        // Input - Confirm Password
         WebElement ConfirmPasswordInput = driver.findElement( By.xpath("//*[@id=\"confirm-password\"]") );
         ConfirmPasswordInput.sendKeys("teste1234");
 
-        // CheckBox Agree Terms
+        // CheckBox - Agree Terms
         WebElement AgreeTermsCheckBox = driver.findElement( By.xpath("//*[@id=\"terms-agreement\"]") );
         AgreeTermsCheckBox.isSelected();
 
-        // Button Create Account
+        // Button - Create Account
         WebElement CreateAccountButton = driver.findElement( By.xpath("//*[@id=\"signup\"]/div/div/form/div[6]/button/span") );
         CreateAccountButton.click();
+        
+        // Message - System
+        WebElement SystemMessage = driver.findElement( By.xpath("//*[@id=\"friends\"]/div/div[1]/h2") );
+        assertEquals("View and add people to share stuff with.", SystemMessage.getText());
     }
     
+    /* Login através do Before */
+    @Ignore
     @Test
-    public void testLogInRation() {   
-        driver.get("https://ration.io/");
-        
-        // Button LogIn
+    public void testLogInRation() {  
+        // Button - LogIn
         WebElement LogInButton = driver.findElement( By.xpath("//*[@id=\"page-header\"]/div/a[2]") );
         LogInButton.click();
         
-        // Input Email Address
+        // Input - E-mail Address
         WebElement EmailAddressInput = driver.findElement( By.xpath("//*[@id=\"login\"]/div/div/form/div[1]/input") );
         EmailAddressInput.sendKeys("rafaelsampy@hotmail.com");
 
-        // Input Password
-        WebElement InputPasswordInput = driver.findElement( By.xpath("//*[@id=\"login\"]/div/div/form/div[2]/input") );
-        InputPasswordInput.sendKeys("teste1234");
+        // Input - Password
+        WebElement PasswordInput = driver.findElement( By.xpath("//*[@id=\"login\"]/div/div/form/div[2]/input") );
+        PasswordInput.sendKeys("teste1234");
 
-        // CheckBox Remenber Me
+        // CheckBox - Remenber Me
         WebElement RemenberMeCheckBox = driver.findElement( By.xpath("//*[@id=\"remember\"]") );
         RemenberMeCheckBox.isSelected();
         
-        // Button Sign In
+        // Button - Sign In
         WebElement SignInButton = driver.findElement( By.xpath("//*[@id=\"login\"]/div/div/form/div[4]/button") );
         SignInButton.click();
-        
-        
+              
+        // Message - System
+        WebElement SystemMessage = driver.findElement( By.xpath("//*[@id=\"friends\"]/div/div[1]/h2") );
+        assertEquals("View and add people to share stuff with.", SystemMessage.getText());
     }
     
+    @Test
+    public void testFriends() { 
+        // Button - Invite Friends
+        WebElement InviteFriendsButton = driver.findElement( By.xpath("//*[@id=\"friends\"]/div/div[1]/div/button") );
+        InviteFriendsButton.click();
+        
+        // Input - Name
+        WebElement NameInput = driver.findElement( By.xpath("//*[@id=\"friends\"]/div[2]/div[2]/div/form/div[1]/div[1]/div/div[1]/input") );
+        NameInput.sendKeys("Henrique");
+
+        // Input - E-mail Address
+        WebElement EmailAddressInput2 = driver.findElement( By.xpath("//*[@id=\"friends\"]/div[2]/div[2]/div/form/div[1]/div[1]/div/div[2]/input") );
+        EmailAddressInput2.sendKeys("henrique.nicolli@gmail.com");
+        
+        // Button - ADD
+        WebElement AddButton = driver.findElement( By.xpath("//*[@id=\"friends\"]/div[2]/div[2]/div/form/div[2]/button[1]/span") );
+        AddButton.click();
+              
+        // Message - Grid Friend Request
+        WebElement GridFriendRequestMessage = driver.findElement( By.xpath("//*[@id=\"friends\"]/div/div[2]/table/tbody/tr/td[1]/strong") );
+        assertEquals("henrique", GridFriendRequestMessage.getText());
+    }
     
-//    private static int scId = 0;
-//
-//    WebDriver driver;
-//    
-//    @BeforeClass
-//    public static void beforeClass() {
-//        WebDriverManager.chromedriver().setup();
-//    }
-//    
-//    @Before
-//    public void before() {
-//        ChromeOptions chromeOptions = new ChromeOptions();
-//        chromeOptions.addArguments("headless");
-//        chromeOptions.addArguments("window-size=1200x600");
-//        chromeOptions.addArguments("start-maximized");
-//        
-//        driver = new ChromeDriver(chromeOptions);
-//        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//    }
-//    
-//    @After
-//    public void after() {
-//        driver.close();
-//    }
-//    
-//    @Test
-//    public void testGoogleSearch() {
-//        driver.get("https://www.google.com.br/");
-//        WebElement searchInput = driver.findElement(By.name("q"));
-//        searchInput.sendKeys("teste de software");
-//        
-//        takeScreenShot();
-//        
-//        searchInput.submit();
-//        
-//        WebDriverWait wait = new WebDriverWait(driver, 10);
-//        wait.until( (ExpectedCondition<Boolean>) (WebDriver d) -> d.getTitle().toLowerCase().startsWith("teste") );
-//        
-//        takeScreenShot();
-//        
-//        assertTrue(driver.getTitle().startsWith("teste de software"));
-//    }
-//    
-//    private void takeScreenShot() {
-//        File sourceFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-//        try {
-//            scId++;
-//            FileUtils.copyFile(sourceFile, new File("./res/" + scId + ".png"));
-//        } catch(IOException e) {}
-//    }
+    @Test
+    public void testHelp() { 
+        // Button - Help
+        WebElement HelpButton = driver.findElement( By.xpath("//*[@id=\"page-header\"]/div/a[3]") );
+        HelpButton.click();
+        
+        // Input - Name
+        WebElement NameInput = driver.findElement( By.xpath("//*[@id=\"full-name\"]") );
+        NameInput.sendKeys("Rafael Hideki de Macedo Sampy");
+
+        // Input - E-mail Address
+        WebElement EmailAddressInput2 = driver.findElement( By.xpath("//*[@id=\"email-address\"]") );
+        EmailAddressInput2.sendKeys("rafaelsampy@hotmail.com");
+
+        // Input - Topic
+        WebElement TopicInput = driver.findElement( By.xpath("//*[@id=\"topic\"]") );
+        TopicInput.sendKeys("Test Topic");
+
+        // TextArea - Message
+        WebElement MessageTextArea = driver.findElement( By.xpath("//*[@id=\"message\"]") );
+        MessageTextArea.sendKeys("Test Message");
+        
+        // Button - Send Message
+        WebElement SendMessageButton = driver.findElement( By.xpath("//*[@id=\"contact\"]/div/div/form/div[5]/button") );
+        SendMessageButton.click();
+              
+        // Message - Feedback
+        WebElement FeedbackMessage = driver.findElement( By.xpath("//*[@id=\"contact\"]/div/div/p[2]") );
+        assertEquals("We have received your message, and someone from our team will get back to you soon.", FeedbackMessage.getText());
+    }
+    
+    @Test
+    public void testSingOut() { 
+        // Button - Account
+        WebElement AccountButton = driver.findElement( By.xpath("//*[@id=\"header-account-menu-link\"]") );
+        AccountButton.click();
+        
+        // Button - Sing Out
+        WebElement SingOutButton = driver.findElement( By.xpath("//*[@id=\"page-header\"]/div/div/div/a[2]") );
+        SingOutButton.click();
+        
+        // Message - System
+        WebElement SystemMessage = driver.findElement( By.xpath("//*[@id=\"login\"]/div/h1") );
+        assertEquals("Sign in to your account", SystemMessage.getText());
+    }
 }
