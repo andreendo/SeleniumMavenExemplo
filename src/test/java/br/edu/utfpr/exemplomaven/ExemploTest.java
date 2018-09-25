@@ -71,30 +71,30 @@ public class ExemploTest {
 //        assertTrue(driver.getTitle().startsWith("teste de software"));
 //    }
     
-    @Test
-    public void testeGitHub() {
-        driver.get("https://www.github.com/");
-        WebElement signUpButton = driver.findElement( By.xpath("/html/body/div[4]/div[1]/div/div/div[2]/div/form/button") );
-        signUpButton.click();
-
-        //check msg: "There were problems creating your account."
-        WebElement errorMsg = driver.findElement( By.xpath("//*[@id=\"signup-form\"]/div[1]") );
-        assertEquals("There were problems creating your account.", errorMsg.getText().trim());
-
-        //check msg: "Login can't be blank"
-        WebElement errorMsg02 = driver.findElement( By.xpath("//*[@id=\"signup-form\"]/auto-check[1]/dl/dd[2]") );
-        assertEquals("Login can't be blank", errorMsg02.getText().trim());
-
-//        navigate to previous page
-//        driver.navigate().back();  
-        
-        //fill the username
-        WebElement username = driver.findElement( By.id("user_login") );
-        username.sendKeys("guimpo");
-
-        WebElement errorMsg03 = driver.findElement( By.xpath("//*[@id=\"signup-form\"]/auto-check[1]/dl/dd[2]") );
-        assertEquals("Login is already taken", errorMsg03.getText().trim());
-    }
+//    @Test
+//    public void testeGitHub() {
+//        driver.get("https://www.github.com/");
+//        WebElement signUpButton = driver.findElement( By.xpath("/html/body/div[4]/div[1]/div/div/div[2]/div/form/button") );
+//        signUpButton.click();
+//
+//        //check msg: "There were problems creating your account."
+//        WebElement errorMsg = driver.findElement( By.xpath("//*[@id=\"signup-form\"]/div[1]") );
+//        assertEquals("There were problems creating your account.", errorMsg.getText().trim());
+//
+//        //check msg: "Login can't be blank"
+//        WebElement errorMsg02 = driver.findElement( By.xpath("//*[@id=\"signup-form\"]/auto-check[1]/dl/dd[2]") );
+//        assertEquals("Login can't be blank", errorMsg02.getText().trim());
+//
+////        navigate to previous page
+////        driver.navigate().back();  
+//        
+//        //fill the username
+//        WebElement username = driver.findElement( By.id("user_login") );
+//        username.sendKeys("guimpo");
+//
+//        WebElement errorMsg03 = driver.findElement( By.xpath("//*[@id=\"signup-form\"]/auto-check[1]/dl/dd[2]") );
+//        assertEquals("Login is already taken", errorMsg03.getText().trim());
+//    }
     
     private void takeScreenShot() {
         File sourceFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
