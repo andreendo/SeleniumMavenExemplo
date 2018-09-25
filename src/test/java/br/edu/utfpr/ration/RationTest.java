@@ -2,6 +2,10 @@ package br.edu.utfpr.ration;
 
 
 import br.edu.utfpr.exemplomaven.*;
+import br.edu.utfpr.po.FaqPage;
+import br.edu.utfpr.po.HomePage;
+import br.edu.utfpr.po.LoginPage;
+import br.edu.utfpr.po.ThingsPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import java.io.File;
 import java.io.IOException;
@@ -122,29 +126,26 @@ public class RationTest {
 //    }
     
     @Test
-    public void testeFriends() {
-        driver.get("https://ration.io/login");
+    public void testeFaqPage() {
+        HomePage homePage = new HomePage(driver);
         
-        //fill the email adress
-        WebElement email = driver.findElement( By.xpath("//*[@id=\"login\"]/div/div/form/div[1]/input") );
-        email.sendKeys("nakaima.prk@gmail.com");
+        FaqPage faqPage = homePage.getNavBar().goToFaq();
+        String expected = "Other than Sails, what technologies, frameworks, or services does this app rely on?";
+        assertEquals(expected, faqPage.getFirstH4());
+    }
+    
+    @Test
+    public void testeLogar() {
+        HomePage homePage = new HomePage(driver);
         
-        //fill the password
-        WebElement password = driver.findElement( By.xpath("//*[@id=\"login\"]/div/div/form/div[2]/input") );
-        password.sendKeys("teste");
+        LoginPage loginPage = homePage.getNavBar().goToLogin();
+        loginPage.setEmail("nakaima.prk@gmail.com");
+        loginPage.setPassword("teste");
         
-        //*[@id="login"]/div/div/form/div[4]/button
-        WebElement signIn = driver.findElement( By.xpath("//*[@id=\"login\"]/div/div/form/div[4]/button") );
-        signIn.submit();
-        
-        String xPath = "//*[@id=\"page-header\"]/div/a[1]";
-        WebElement friends = driver.findElement( By.xpath(xPath) );
-        friends.click();
-        
-        //*[@id="friends"]/div/div[1]/h1
-        WebElement h1 = driver.findElement( By.xpath("//*[@id=\"friends\"]/div/div[1]/h1") );
-        String expected = "Friends";
-        assertEquals(expected, h1.getText().trim());
+        ThingsPage thingsPage = loginPage.submit();
+       
+        //*[@id="available-things"]/div/div[1]/h1
+        assertEquals("Things", thingsPage.getTitle());
     }
     
     private void takeScreenShot() {
