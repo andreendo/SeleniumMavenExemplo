@@ -10,16 +10,21 @@ public class RationBasePage extends BasePage {
     @FindBy(tagName = "h1")
     private WebElement title;
 
-    private Menu menu;
+    public Menu menu;
 
     public RationBasePage(WebDriver driver) {
         super(driver);
+        menu = new Menu(driver);
+
     }
 
     public Menu getMenu() {
         return menu;
     }
 
+    public String getLink(){
+        return driver.getCurrentUrl();
+    }
     public String getTitle() {
         return title.getText();
     }

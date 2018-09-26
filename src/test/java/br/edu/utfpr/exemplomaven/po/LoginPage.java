@@ -20,7 +20,6 @@ public class LoginPage extends RationBasePage {
 
     public LoginPage(WebDriver driver) {
         super(driver);
-        driver.get("https://ration.io/login");
     }
 
     public WebElement getLoginInput() {

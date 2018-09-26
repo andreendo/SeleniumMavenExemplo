@@ -1,13 +1,10 @@
 package br.edu.utfpr.exemplomaven;
 
 
-import br.edu.utfpr.exemplomaven.po.LoginPage;
+import br.edu.utfpr.exemplomaven.po.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -96,5 +93,22 @@ public class rationTests {
         driver.findElement(By.linkText("Help")).click();
         assertEquals("Get in touch", driver.findElement(By.tagName("h1")).getText());
 
+    }
+
+    @Test
+    public void navigationLogoutTest() {
+        HomePage home = new HomePage(driver);
+        Menu m = home.getMenu();
+        SignUpPage sign = m.goToSignUp();
+        Assert.assertEquals("https://ration.io/signup", sign.getLink());
+
+        LoginPage lp = sign.getMenu().goToLogin();
+        Assert.assertEquals("https://ration.io/login", lp.getLink());
+
+        FaqPage faq = lp.getMenu().goToFaq();
+        Assert.assertEquals("https://ration.io/faq", faq.getLink());
+
+        home = faq.getMenu().goToHome();
+        Assert.assertEquals("https://ration.io/", home.getLink());
     }
 }
