@@ -25,7 +25,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  *
  * @author andreendo
  */
-public class ExemploTest {
+public class RationTest {
 
     private static int scId = 0;
 
@@ -52,26 +52,32 @@ public class ExemploTest {
         driver.close();
     }
 
-    //@Test
-    public void testGoogleSearch() {
-        
+    // @Test
+    public void testRationEnviarEmail() {
+
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\Usuario\\Desktop\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get("https://www.google.com.br/");
-        WebElement searchInput = driver.findElement(By.name("q"));
-        searchInput.sendKeys("teste de software");
+        driver.get("https://ration.io/");
+
+        WebElement login = driver.findElement(By.xpath("//*[@id=\"page-header\"]/div/a[2]"));
+        login.click();
 
         takeScreenShot();
 
-        searchInput.submit();
+        WebElement link = driver.findElement(By.xpath("//*[@id=\"login\"]/div/div/p/a"));
+        link.click();
 
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until((ExpectedCondition<Boolean>) (WebDriver d) -> d.getTitle().toLowerCase().startsWith("teste"));
+        WebElement email = driver.findElement(By.name("email-address"));
+        email.sendKeys("bruno_daguano@hotmail.com");
+        WebElement enviar = driver.findElement(By.xpath("//*[@id=\"forgot-password\"]/div/div/form/div[2]/button/span"));
+        enviar.click();
 
+        WebElement mensagem = driver.findElement(By.className("text-center"));
         takeScreenShot();
 
-        assertTrue(driver.getTitle().startsWith("teste de software"));
+        assertEquals(mensagem.getText().trim(), "Recover password");
+
     }
 
     private void takeScreenShot() {
@@ -82,10 +88,30 @@ public class ExemploTest {
         } catch (IOException e) {
         }
     }
-
+    
+    
     @Test
+    public void logar(){
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Usuario\\Desktop\\chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.get("https://ration.io/");
+        
+        WebElement accont = driver.findElement(By.xpath("//*[@id=\"header-account-menu-link\"]"));
+        accont.click();
+        
+        WebElement sing_out = driver.findElement(By.xpath("//*[@id=\"page-header\"]/div/div/div/a[2]"));
+        sing_out.click();
+        
+        WebElement mensagem = driver.findElement(By.xpath("//*[@id=\"login\"]/div/h1"));
+        takeScreenShot();
+
+        assertEquals(mensagem.getText().trim(), "Sign in to your account");
+    }
+
+    //@Test
     public void test02() {
-       
+
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\Usuario\\Desktop\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -109,7 +135,7 @@ public class ExemploTest {
         //click on button "create account"
         WebElement caButton = driver.findElement(By.id("signup_button"));
         caButton.click();
-        
+
         try {
             errorMsg02 = driver.findElement(By.xpath("//*[@id=\"signup-form\"]/dl[1]/dd[2]"));
             fail();
@@ -117,4 +143,6 @@ public class ExemploTest {
         }
         driver.close();
     }
+
+  
 }
