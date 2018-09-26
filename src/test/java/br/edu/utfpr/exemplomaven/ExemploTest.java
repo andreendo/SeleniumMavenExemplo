@@ -39,12 +39,12 @@ public class ExemploTest {
     @Before
     public void before() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("headless");
+        //chromeOptions.addArguments("headless");
         chromeOptions.addArguments("window-size=1200x600");
         chromeOptions.addArguments("start-maximized");
         
         driver = new ChromeDriver(chromeOptions);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);//tenta pesquisar novamente
     }
     
     @After
@@ -69,7 +69,7 @@ public class ExemploTest {
         
         assertTrue(driver.getTitle().startsWith("teste de software"));
     }
-    
+   
     private void takeScreenShot() {
         File sourceFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         try {
